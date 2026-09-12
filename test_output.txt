@@ -1,0 +1,30 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-9.1.1, pluggy-1.6.0
+rootdir: E:\Dev\tars-ai\tars-ai-api
+plugins: anyio-4.15.1
+collected 2 items
+
+tests\test_forecasts.py .                                                [ 50%]
+tests\test_learning.py .                                                 [100%]
+
+============================== warnings summary ===============================
+venv\Lib\site-packages\fastapi\testclient.py:1
+  E:\Dev\tars-ai\tars-ai-api\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+venv\Lib\site-packages\starlette\testclient.py:53
+  E:\Dev\tars-ai\tars-ai-api\venv\Lib\site-packages\starlette\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+app\config.py:4
+  E:\Dev\tars-ai\tars-ai-api\app\config.py:4: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class Settings(BaseSettings):
+
+tests/test_forecasts.py::test_forecasting_engine
+tests/test_learning.py::test_learning_engine_ai_lock
+tests/test_learning.py::test_learning_engine_ai_lock
+  E:\Dev\tars-ai\tars-ai-api\venv\Lib\site-packages\sqlalchemy\sql\schema.py:3627: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 2 passed, 6 warnings in 7.26s ========================
