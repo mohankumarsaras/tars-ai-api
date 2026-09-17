@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, Date, Text, ForeignKey, Table, Float, DateTime
 from sqlalchemy.orm import relationship
 from .database.database import Base
+import datetime
 
 # Association table for Project <-> Skill
 project_skills = Table(
@@ -26,6 +27,10 @@ class UserProfile(Base):
     career_interests = Column(Text, nullable=True)
     target_roles = Column(Text, nullable=True)
     portfolio_url = Column(String(255), nullable=True)
+    display_name = Column(String(100), nullable=True)
+    professional_identity = Column(String(150), nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     
     education = relationship("Education", back_populates="user")
     certifications = relationship("Certification", back_populates="user")
@@ -56,6 +61,12 @@ class CareerExperience(Base):
     technologies = Column(Text, nullable=True)
     achievements = Column(Text, nullable=True)
     problems_solved = Column(Text, nullable=True)
+    organization_name = Column(String(150), nullable=True)
+    domain = Column(String(100), nullable=True)
+    source = Column(String(100), nullable=True)
+    confidence = Column(String(50), nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
     
     user = relationship("UserProfile", back_populates="career_experiences")
     company = relationship("Company", back_populates="experiences")
@@ -95,6 +106,10 @@ class Skill(Base):
     name = Column(String(100), unique=True, nullable=False)
     description = Column(Text, nullable=True)
     familiarity = Column(String(50), nullable=True)
+    status = Column(String(50), nullable=True, default="DOCUMENTED")
+    assessment_status = Column(String(50), nullable=True, default="NOT_ASSESSED")
+    confidence = Column(String(50), nullable=True, default="PROVISIONAL")
+    score = Column(Float, nullable=True)
     
     category = relationship("SkillCategory", back_populates="skills")
     projects = relationship("Project", secondary=project_skills, back_populates="skills")
@@ -113,6 +128,11 @@ class Education(Base):
     subjects = Column(Text, nullable=True)
     academic_projects = Column(Text, nullable=True)
     courses = Column(Text, nullable=True)
+    qualification = Column(String(150), nullable=True)
+    result = Column(String(100), nullable=True)
+    year = Column(Integer, nullable=True)
+    source = Column(String(100), nullable=True)
+    confidence = Column(String(50), nullable=True)
     
     user = relationship("UserProfile", back_populates="education")
 
@@ -127,6 +147,10 @@ class Certification(Base):
     credential_id = Column(String(100), nullable=True)
     credential_url = Column(String(255), nullable=True)
     related_skills = Column(Text, nullable=True)
+    code = Column(String(100), nullable=True)
+    status = Column(String(50), nullable=True)
+    verification_status = Column(String(50), nullable=True)
+    source = Column(String(100), nullable=True)
     
     user = relationship("UserProfile", back_populates="certifications")
 
@@ -141,6 +165,10 @@ class Evidence(Base):
     skill_id = Column(Integer, ForeignKey("skills.id"), nullable=True)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=True)
     career_experience_id = Column(Integer, ForeignKey("career_experiences.id"), nullable=True)
+    evidence_type = Column(String(100), nullable=True)
+    source = Column(String(100), nullable=True)
+    verification_status = Column(String(50), nullable=True)
+    confidence = Column(String(50), nullable=True)
     
     user = relationship("UserProfile", back_populates="evidence")
     skill = relationship("Skill", back_populates="evidence")
@@ -159,7 +187,20 @@ class CareerGoal(Base):
     user = relationship("UserProfile", back_populates="career_goals")
 
 from sqlalchemy import DateTime
-import datetime
+
+class ImportAuditLog(Base):
+    __tablename__ = "import_audit_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    import_id = Column(String(100), unique=True, index=True, nullable=False)
+    source_file = Column(String(255), nullable=False)
+    source_hash = Column(String(255), nullable=False)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    records_created = Column(Integer, default=0)
+    records_updated = Column(Integer, default=0)
+    records_skipped = Column(Integer, default=0)
+    duplicates = Column(Integer, default=0)
+    validation_errors = Column(Integer, default=0)
+    review_required = Column(Integer, default=0)
 
 class KnowledgeRecord(Base):
     __tablename__ = "knowledge_records"

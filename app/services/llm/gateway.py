@@ -1,4 +1,5 @@
 import os
+from app.config import settings
 from app.services.llm.base import LLMProvider, EmbeddingProvider
 from app.services.llm.providers.openai_compatible import OpenAICompatibleProvider
 from app.services.llm.providers.ollama_provider import OllamaProvider
@@ -11,7 +12,7 @@ class AIGateway:
     
     @staticmethod
     def get_llm_provider() -> LLMProvider:
-        provider_type = os.getenv("AI_PROVIDER_TYPE", "external").lower()
+        provider_type = settings.LLM_PROVIDER.lower()
         
         if provider_type == "ollama":
             return OllamaProvider()

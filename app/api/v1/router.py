@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from . import profile, chat, intelligence, assessments, forecasts, dashboard, learning, search, knowledge, education, career, projects, skills, evidence, career_goals, certifications
+from . import profile, chat, intelligence, assessments, forecasts, dashboard, learning, search, knowledge, education, career, projects, skills, evidence, career_goals, certifications, health
 
 api_router = APIRouter()
 api_router.include_router(profile.router, prefix="/profile", tags=["profile"])
@@ -13,6 +13,7 @@ api_router.include_router(career_goals.router, prefix="/career-goals", tags=["ca
 api_router.include_router(certifications.router, prefix="/certifications", tags=["certifications"])
 api_router.include_router(knowledge.router, prefix="/knowledge", tags=["knowledge"])
 api_router.include_router(search.router, prefix="/search", tags=["search"])
+api_router.include_router(health.router, prefix="/health", tags=["health"])
 
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
 

@@ -1,4 +1,4 @@
-from app.services.llm.external_provider import ExternalLLMProvider
+from app.services.llm.gateway import AIGateway
 from app.services.search import get_search_provider
 from sqlalchemy.orm import Session
 import json
@@ -6,7 +6,7 @@ import json
 class ContextPipeline:
     def __init__(self, db: Session):
         self.db = db
-        self.llm = ExternalLLMProvider()
+        self.llm = AIGateway.get_llm_provider()
         self.search_provider = get_search_provider(db)
         
     def identify_intent(self, question: str) -> str:

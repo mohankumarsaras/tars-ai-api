@@ -93,3 +93,30 @@ def delete_knowledge_record(item_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"status": "deleted"}
 
+@router.get("/profile", response_model=schemas.UserProfile)
+def get_knowledge_profile(db: Session = Depends(get_db)):
+    # Get the default single user profile for personal knowledge
+    profile = db.query(models.UserProfile).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profile
+
+@router.get("/skills", response_model=List[schemas.Skill])
+def get_knowledge_skills(db: Session = Depends(get_db)):
+    return db.query(models.Skill).all()
+
+@router.get("/career", response_model=List[schemas.CareerExperience])
+def get_knowledge_career(db: Session = Depends(get_db)):
+    return db.query(models.CareerExperience).all()
+
+@router.get("/education", response_model=List[schemas.Education])
+def get_knowledge_education(db: Session = Depends(get_db)):
+    return db.query(models.Education).all()
+
+@router.get("/certifications", response_model=List[schemas.Certification])
+def get_knowledge_certifications(db: Session = Depends(get_db)):
+    return db.query(models.Certification).all()
+
+@router.get("/evidence", response_model=List[schemas.Evidence])
+def get_knowledge_evidence(db: Session = Depends(get_db)):
+    return db.query(models.Evidence).all()

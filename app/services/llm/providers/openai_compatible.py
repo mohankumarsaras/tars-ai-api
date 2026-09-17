@@ -1,12 +1,13 @@
 import os
 import httpx
+from app.config import settings
 from app.services.llm.base import LLMProvider
 
 class OpenAICompatibleProvider(LLMProvider):
     def __init__(self):
-        self.api_key = os.getenv("LLM_API_KEY", "")
-        self.base_url = os.getenv("LLM_BASE_URL", "https://api.openai.com/v1")
-        self.model = os.getenv("LLM_MODEL", "gpt-4o-mini")
+        self.api_key = settings.LLM_API_KEY
+        self.base_url = settings.LLM_BASE_URL
+        self.model = settings.LLM_MODEL
 
     def generate_response(self, prompt: str, system_message: str = None) -> str:
         headers = {

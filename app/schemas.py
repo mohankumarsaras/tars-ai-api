@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
-from datetime import date
+from datetime import date, datetime
 
 class UserProfileBase(BaseModel):
     first_name: str
@@ -21,12 +21,16 @@ class UserProfileBase(BaseModel):
     repository_url: Optional[str] = None
     deployment_url: Optional[str] = None
     lessons_learned: Optional[str] = None
+    display_name: Optional[str] = None
+    professional_identity: Optional[str] = None
 
 class UserProfileCreate(UserProfileBase):
     pass
 
 class UserProfile(UserProfileBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 class EducationBase(BaseModel):
@@ -40,6 +44,11 @@ class EducationBase(BaseModel):
     subjects: Optional[str] = None
     academic_projects: Optional[str] = None
     courses: Optional[str] = None
+    qualification: Optional[str] = None
+    result: Optional[str] = None
+    year: Optional[int] = None
+    source: Optional[str] = None
+    confidence: Optional[str] = None
 
 class EducationCreate(EducationBase):
     pass
@@ -66,6 +75,10 @@ class CareerExperienceBase(BaseModel):
     technologies: Optional[str] = None
     achievements: Optional[str] = None
     problems_solved: Optional[str] = None
+    organization_name: Optional[str] = None
+    domain: Optional[str] = None
+    source: Optional[str] = None
+    confidence: Optional[str] = None
 
 class CareerExperienceCreate(CareerExperienceBase):
     company: CompanyCreate
@@ -73,6 +86,8 @@ class CareerExperienceCreate(CareerExperienceBase):
 class CareerExperience(CareerExperienceBase):
     id: int
     company_id: int
+    created_at: datetime
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 class ProjectBase(BaseModel):
@@ -95,6 +110,10 @@ class SkillBase(BaseModel):
     name: str
     description: Optional[str] = None
     familiarity: Optional[str] = None
+    status: Optional[str] = "DOCUMENTED"
+    assessment_status: Optional[str] = "NOT_ASSESSED"
+    confidence: Optional[str] = "PROVISIONAL"
+    score: Optional[float] = None
 
 class SkillCreate(SkillBase):
     pass
@@ -110,6 +129,10 @@ class EvidenceBase(BaseModel):
     skill_id: Optional[int] = None
     project_id: Optional[int] = None
     career_experience_id: Optional[int] = None
+    evidence_type: Optional[str] = None
+    source: Optional[str] = None
+    verification_status: Optional[str] = None
+    confidence: Optional[str] = None
 
 class EvidenceCreate(EvidenceBase):
     pass
@@ -141,6 +164,10 @@ class CertificationBase(BaseModel):
     credential_id: Optional[str] = None
     credential_url: Optional[str] = None
     related_skills: Optional[str] = None
+    code: Optional[str] = None
+    status: Optional[str] = None
+    verification_status: Optional[str] = None
+    source: Optional[str] = None
 
 class CertificationCreate(CertificationBase):
     pass
@@ -149,7 +176,24 @@ class Certification(CertificationBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
 
-from datetime import datetime
+class ImportAuditLogBase(BaseModel):
+    import_id: str
+    source_file: str
+    source_hash: str
+    records_created: int = 0
+    records_updated: int = 0
+    records_skipped: int = 0
+    duplicates: int = 0
+    validation_errors: int = 0
+    review_required: int = 0
+
+class ImportAuditLogCreate(ImportAuditLogBase):
+    pass
+
+class ImportAuditLog(ImportAuditLogBase):
+    id: int
+    timestamp: datetime
+    model_config = ConfigDict(from_attributes=True)
 
 class KnowledgeRecordBase(BaseModel):
     user_id: int
